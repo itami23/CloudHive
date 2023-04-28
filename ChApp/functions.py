@@ -8,9 +8,10 @@ import os
 import os.path
 from io import BytesIO
 import io
+import hashlib
 
 
-def Upload(file_data,file_name,user_name,file_mimetype):
+def get_credentials():
     SCOPES=["https://www.googleapis.com/auth/drive"]
     creds = None
     if os.path.exists('token.json'):
@@ -23,6 +24,13 @@ def Upload(file_data,file_name,user_name,file_mimetype):
             creds = flow.run_local_server(port=0)
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
+
+    return creds
+
+
+
+def Upload(file_data,file_name,user_name,file_mimetype):
+    creds = get_credentials()
 
     folder_name = user_name
     try:
@@ -51,5 +59,40 @@ def Upload(file_data,file_name,user_name,file_mimetype):
 
 
 
-def HashFile():
-    pass
+def HashFile(file_data):
+    sha256 = hashlib.sha256()
+    sha256.update(file_data)
+    return sha256.hexdigest()
+
+
+def ListFile(user_name):
+    creds = get_credentials()
+    try:
+        # Build the Google Drive API client
+        service = build('drive', 'v3', credentials=creds)
+
+        # Get the list of files in the user's folder
+        folder_name = user_name
+        folder_query = "name='{}' and mimeType='application/vnd.google-apps.folder'".format(folder_name)
+        folder_results = service.files().list(q=folder_query, fields="nextPageToken, files(id, name)").execute()
+        folder_items = folder_results.get('files', [])
+        if not folder_items:
+            message = 'No files found.'
+        else:
+            # Get the list of files in the user's folder
+            file_query = "'{}' in parents".format(folder_items[0]['id'])
+            file_results = service.files().list(q=file_query, fields="nextPageToken, files(id, name, createdTime)").execute()
+            file_items = file_results.get('files', [])
+            if not file_items:
+                message = 'No files found.'
+                print('error')
+            else:
+                return file_items
+                
+
+    except HttpError as error:
+        print(str(error))
+
+
+
+

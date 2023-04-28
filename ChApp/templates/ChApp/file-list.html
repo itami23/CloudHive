@@ -1,0 +1,148 @@
+<!-- 
+<h1>Your Files</h1>
+  <div class="row">
+    {% for file in files %}
+      <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+          <div class="card-body">
+            <p class="card-text">{{ file.name }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <a href="{% url 'file-download' file.id %}" class="btn btn-sm btn-outline-secondary">Download</a>
+              </div>
+              <small class="text-muted">{{ created |date:"F d, Y" }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No files uploaded yet.</p>
+    {% endfor %}
+  </div>
+  -->
+
+
+
+
+
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Flat Able - Premium Admin Template by Phoenixcoded</title>
+    <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 11]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="">
+    <meta name="author" content="Phoenixcoded" />
+    <!-- Favicon icon -->
+    <link rel="icon" href="{% static 'assets/images/favicon.ico' %}" type="image/x-icon">
+
+    <!-- vendor css -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    
+    
+
+</head>
+<body class="">
+  <!-- [ Pre-loader ] start -->
+  <div class="loader-bg">
+    <div class="loader-track">
+      <div class="loader-fill"></div>
+    </div>
+  </div>
+    {% block content %}
+    {% include 'All/sidebar.html' %}
+  {% include 'All/navbar.html' %}
+    
+  
+  <section class="pcoded-main-container">
+        <div class="pcoded-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">File List</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <!-- [ Main Content ] start -->
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Striped Table</h5>
+                        <span class="d-block m-t-5">use class <code>table-striped</code> inside table element</span>
+                    </div>
+                    <div class="card-body table-border-style">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Title</th>
+                                        <th>Description</th>
+                                        <th>Download</th>
+                                        <th>Creation Time</th>
+                                        <th>View Info</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if files %}
+                                  {% for file in files %}
+                                    <tr>
+                                        <td>{{file.file_id}}</td>
+                                        <td>{{file.title}}</td>
+                                        <td>{{file.description}}</td>
+                                        <td>{{file.created}}</td>
+                                        <td><a href="{% url 'file-download' file.file_id %}" class="btn btn-sm btn-outline-secondary">Download</a></td>
+                                        <td><a href="{% url 'view-modify' file.file_id %}" class="btn btn-sm btn-outline-secondary">View</a></td>
+                                    </tr>
+                                  {% endfor %}
+                                  {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ Main Content ] end -->
+    
+        </div>
+    </section>
+    
+
+
+
+    {% endblock %}
+
+    <!-- Required Js -->
+    <script src="{% static 'assets/js/vendor-all.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/js/pcoded.min.js' %}"></script>
+
+<!-- Apex Chart -->
+<script src="{% static 'assets/js/plugins/apexcharts.min.js' %}"></script>
+
+
+<!-- custom-chart js -->
+<script src="{% static 'assets/js/pages/dashboard-main.js' %}"></script>
+</body>
+
+
+</html>
+
+
